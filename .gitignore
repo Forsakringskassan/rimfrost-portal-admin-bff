@@ -1,0 +1,22 @@
+# Build output
+target/
+
+# Editor directories and files
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.sw?
+.project
+.classpath
+nb-configuration.xml
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment / secrets
+.env

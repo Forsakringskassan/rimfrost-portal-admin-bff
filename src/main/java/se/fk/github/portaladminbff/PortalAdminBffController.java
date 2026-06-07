@@ -1,0 +1,150 @@
+package se.fk.github.portaladminbff;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.fk.github.portaladminbff.model.*;
+
+import java.util.List;
+import java.util.Map;
+
+@Path("")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class PortalAdminBffController
+{
+
+   private static final Logger LOGGER = LoggerFactory.getLogger(PortalAdminBffController.class);
+
+   @Inject
+   @RestClient
+   se.fk.github.portaladminbff.integration.OulClient oulClient;
+
+   @ConfigProperty(name = "portal.admin.mock.uppgifter", defaultValue = "true")
+   boolean mockUppgifter;
+
+   /**
+    * GET /admin/tasks
+    *
+    * Returns all operativa uppgifter for the admin view.
+    *
+    * When mockUppgifter=true (default): returns static sample data so the portal
+    * works without a running OUL instance.
+    *
+    * When mockUppgifter=false: calls the OUL service. NOTE — OUL currently has no
+    * "get all" admin endpoint; this branch is a placeholder for when one is added.
+    */
+   @GET
+   @Path("/admin/tasks")
+   public Response getAllTasks()
+   {
+      LOGGER.debug("GET /admin/tasks mock={}", mockUppgifter);
+
+      if (mockUppgifter)
+      {
+         return Response.ok(Map.of("operativa_uppgifter", buildMockUppgifter())).build();
+      }
+
+      // Placeholder: wire up real OUL admin endpoint here when available.
+      LOGGER.warn("GET /admin/tasks: no OUL admin endpoint configured, returning empty list");
+      TasksResponse empty = new TasksResponse();
+      empty.operativaUppgifter = List.of();
+      return Response.ok(empty).build();
+   }
+
+   private List<OperativUppgift> buildMockUppgifter()
+   {
+      return List.of(
+            mockUppgift(
+                  "a1b2c3d4-0001-0001-0001-000000000001",
+                  "h1b2c3d4-0001-0001-0001-000000000001",
+                  "Ny",
+                  "RTF_MANUELL",
+                  "Handläggning",
+                  "2025-01-10T08:00:00Z",
+                  "116759e4-18fd-4209-849c-90abbd257d22",
+                  "469ddd20-6796-4e05-9e18-6a95953f6cb3"
+            ),
+            mockUppgift(
+                  "a1b2c3d4-0002-0002-0002-000000000002",
+                  "h1b2c3d4-0002-0002-0002-000000000002",
+                  "Tilldelad",
+                  "BEKRAFTA_BESLUT",
+                  "Handläggning",
+                  "2025-01-11T09:15:00Z",
+                  "550e8400-e29b-41d4-a716-446655440001",
+                  "19850601-5678"
+            ),
+            mockUppgift(
+                  "a1b2c3d4-0003-0003-0003-000000000003",
+                  "h1b2c3d4-0003-0003-0003-000000000003",
+                  "Ny",
+                  "RTF_MASKINELL",
+                  "Handläggning",
+                  "2025-01-12T10:30:00Z",
+                  null,
+                  null
+            ),
+            mockUppgift(
+                  "a1b2c3d4-0004-0004-0004-000000000004",
+                  "h1b2c3d4-0004-0004-0004-000000000004",
+                  "Avslutad",
+                  "BEKRAFTA_BESLUT",
+                  "Beslut",
+                  "2025-01-08T11:00:00Z",
+                  "550e8400-e29b-41d4-a716-446655440002",
+                  "19721115-9011"
+            ),
+            mockUppgift(
+                  "a1b2c3d4-0005-0005-0005-000000000005",
+                  "h1b2c3d4-0005-0005-0005-000000000005",
+                  "Avbruten",
+                  "RTF_MANUELL",
+                  "Handläggning",
+                  "2025-01-09T14:45:00Z",
+                  "116759e4-18fd-4209-849c-90abbd257d22",
+                  "469ddd20-6796-4e05-9e18-6a95953f6cb3"
+            )
+      );
+   }
+
+   private OperativUppgift mockUppgift(
+         String uppgiftId,
+         String handlaggningId,
+         String status,
+         String regel,
+         String roll,
+         String skapad,
+         String handlaggarTypId,
+         String handlaggarVarde)
+   {
+      OperativUppgift u = new OperativUppgift();
+      u.uppgiftId = uppgiftId;
+      u.handlaggningId = handlaggningId;
+      u.status = status;
+      u.regel = regel;
+      u.roll = roll;
+      u.skapad = skapad;
+      u.planeradTill = "";
+      u.utford = "";
+      u.beskrivning = regel + " — mockbeskrivning";
+      u.verksamhetslogik = "VAB";
+      u.url = "";
+      u.individer = List.of();
+
+      if (handlaggarTypId != null)
+      {
+         HandlaggarId hid = new HandlaggarId();
+         hid.typId = handlaggarTypId;
+         hid.varde = handlaggarVarde;
+         u.handlaggarId = hid;
+      }
+
+      return u;
+   }
+}
