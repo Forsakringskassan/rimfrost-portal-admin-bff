@@ -12,6 +12,7 @@ import se.fk.github.portaladminbff.model.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,21 +24,21 @@ public class PortalAdminBffController
 
    @Inject
    @RestClient
-   se.fk.github.portaladminbff.integration.OulClient oulClient;
+   se.fk.github.portaladminbff.integration.OulManagementClient oulManagementClient;
 
    @ConfigProperty(name = "portal.admin.mock.uppgifter", defaultValue = "true")
    boolean mockUppgifter;
+
+   @ConfigProperty(name = "portal.admin.tasks.limit", defaultValue = "500")
+   int tasksLimit;
 
    /**
     * GET /admin/tasks
     *
     * Returns all operativa uppgifter for the admin view.
     *
-    * When mockUppgifter=true (default): returns static sample data so the portal
-    * works without a running OUL instance.
-    *
-    * When mockUppgifter=false: calls the OUL service. NOTE — OUL currently has no
-    * "get all" admin endpoint; this branch is a placeholder for when one is added.
+    * When mockUppgifter=true (default for local dev): returns static sample data.
+    * When mockUppgifter=false: fetches from OUL management via GET /uppgifter.
     */
    @GET
    @Path("/admin/tasks")
@@ -50,11 +51,12 @@ public class PortalAdminBffController
          return Response.ok(Map.of("operativa_uppgifter", buildMockUppgifter())).build();
       }
 
-      // Placeholder: wire up real OUL admin endpoint here when available.
-      LOGGER.warn("GET /admin/tasks: no OUL admin endpoint configured, returning empty list");
-      TasksResponse empty = new TasksResponse();
-      empty.operativaUppgifter = List.of();
-      return Response.ok(empty).build();
+      MgmtUppgiftPage page = oulManagementClient.getUppgifter(tasksLimit, 0);
+      List<OperativUppgift> uppgifter = page.items.stream()
+            .map(UppgiftMapper::transform)
+            .collect(Collectors.toList());
+
+      return Response.ok(Map.of("operativa_uppgifter", uppgifter)).build();
    }
 
    private List<OperativUppgift> buildMockUppgifter()
