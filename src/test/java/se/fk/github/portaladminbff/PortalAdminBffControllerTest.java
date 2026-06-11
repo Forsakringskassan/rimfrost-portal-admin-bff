@@ -134,6 +134,56 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void getSorteringsordningar_returnsListFromOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning"))
+                  .willReturn(okJson("""
+                        [
+                          {
+                            "id": "f47ac10b-0001-0001-0001-000000000001",
+                            "skapad": "2026-06-01T10:00:00Z",
+                            "entries": [
+                              {
+                                "constraints": [
+                                  {"field": "status", "operator": "eq", "value": "Ny"}
+                                ],
+                                "sort_by": {"field": "skapad", "direction": "asc"}
+                              }
+                            ]
+                          }
+                        ]
+                        """))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning")
+            .then()
+            .statusCode(200)
+            .body("$", hasSize(1))
+            .body("[0].id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
+            .body("[0].entries", hasSize(1))
+            .body("[0].entries[0].sort_by.field", equalTo("skapad"))
+            .body("[0].entries[0].sort_by.direction", equalTo("asc"))
+            .body("[0].entries[0].constraints[0].field", equalTo("status"));
+   }
+
+   @Test
+   void getSorteringsordningar_returnsEmptyListWhenOulReturnsNone()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning"))
+                  .willReturn(okJson("[]"))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning")
+            .then()
+            .statusCode(200)
+            .body("$", empty());
+   }
+
+   @Test
    void getAllTasks_callsOulWithLimitAndOffset()
    {
       OulManagementWireMock.server.stubFor(

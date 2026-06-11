@@ -51,12 +51,20 @@ public class PortalAdminBffController
          return Response.ok(Map.of("operativa_uppgifter", buildMockUppgifter())).build();
       }
 
-      MgmtUppgiftPage page = oulManagementClient.getUppgifter(tasksLimit, 0);
+      OulUppgiftPage page = oulManagementClient.getUppgifter(tasksLimit, 0);
       List<OperativUppgift> uppgifter = page.items.stream()
             .map(UppgiftMapper::transform)
             .collect(Collectors.toList());
 
       return Response.ok(Map.of("operativa_uppgifter", uppgifter)).build();
+   }
+
+   @GET
+   @Path("/admin/sorteringsordning")
+   public Response getSorteringsordningar()
+   {
+      LOGGER.debug("GET /admin/sorteringsordning");
+      return Response.ok(oulManagementClient.getSorteringsordningar()).build();
    }
 
    private List<OperativUppgift> buildMockUppgifter()
