@@ -22,4 +22,8 @@ public interface OulManagementClient
    @GET
    @Path("/sorteringsordning")
    List<OulSorteringsordningResponse> getSorteringsordningar();
+
+   @GET
+   @Path("/sorteringsordning/default")
+   OulSorteringsordningResponse getDefaultSorteringsordning();
 }

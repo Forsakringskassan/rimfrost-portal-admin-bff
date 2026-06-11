@@ -2,6 +2,7 @@ package se.fk.github.portaladminbff;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -65,6 +66,21 @@ public class PortalAdminBffController
    {
       LOGGER.debug("GET /admin/sorteringsordning");
       return Response.ok(oulManagementClient.getSorteringsordningar()).build();
+   }
+
+   @GET
+   @Path("/admin/sorteringsordning/default")
+   public Response getDefaultSorteringsordning()
+   {
+      LOGGER.debug("GET /admin/sorteringsordning/default");
+      try
+      {
+         return Response.ok(oulManagementClient.getDefaultSorteringsordning()).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
    }
 
    private List<OperativUppgift> buildMockUppgifter()

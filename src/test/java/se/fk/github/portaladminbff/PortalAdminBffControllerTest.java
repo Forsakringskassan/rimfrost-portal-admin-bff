@@ -184,6 +184,52 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void getDefaultSorteringsordning_returnsDefaultFromOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning/default"))
+                  .willReturn(okJson("""
+                        {
+                          "id": "f47ac10b-0001-0001-0001-000000000001",
+                          "skapad": "2026-06-01T10:00:00Z",
+                          "entries": [
+                            {
+                              "constraints": [
+                                {"field": "skapad", "operator": "between", "from": "2026-01-01", "to": "2026-06-30"}
+                              ],
+                              "sort_by": {"field": "skapad", "direction": "desc"}
+                            }
+                          ]
+                        }
+                        """))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning/default")
+            .then()
+            .statusCode(200)
+            .body("id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
+            .body("entries", hasSize(1))
+            .body("entries[0].sort_by.field", equalTo("skapad"))
+            .body("entries[0].sort_by.direction", equalTo("desc"))
+            .body("entries[0].constraints[0].operator", equalTo("between"));
+   }
+
+   @Test
+   void getDefaultSorteringsordning_returns404WhenNotConfigured()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning/default"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning/default")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
    void getAllTasks_callsOulWithLimitAndOffset()
    {
       OulManagementWireMock.server.stubFor(
