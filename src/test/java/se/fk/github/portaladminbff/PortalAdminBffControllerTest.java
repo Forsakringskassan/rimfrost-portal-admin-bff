@@ -184,6 +184,46 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void getSorteringsordning_returnsItemById()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001"))
+                  .willReturn(okJson("""
+                        {
+                          "id": "f47ac10b-0001-0001-0001-000000000001",
+                          "skapad": "2026-06-01T10:00:00Z",
+                          "entries": [
+                            {
+                              "sort_by": {"field": "regel", "direction": "asc"}
+                            }
+                          ]
+                        }
+                        """))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001")
+            .then()
+            .statusCode(200)
+            .body("id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
+            .body("entries[0].sort_by.field", equalTo("regel"));
+   }
+
+   @Test
+   void getSorteringsordning_returns404WhenNotFound()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning/does-not-exist"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .when().get("/admin/sorteringsordning/does-not-exist")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
    void getDefaultSorteringsordning_returnsDefaultFromOul()
    {
       OulManagementWireMock.server.stubFor(

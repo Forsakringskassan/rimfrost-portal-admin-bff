@@ -69,6 +69,21 @@ public class PortalAdminBffController
    }
 
    @GET
+   @Path("/admin/sorteringsordning/{id}")
+   public Response getSorteringsordning(@PathParam("id") String id)
+   {
+      LOGGER.debug("GET /admin/sorteringsordning/{}", id);
+      try
+      {
+         return Response.ok(oulManagementClient.getSorteringsordning(id)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
+   @GET
    @Path("/admin/sorteringsordning/default")
    public Response getDefaultSorteringsordning()
    {
