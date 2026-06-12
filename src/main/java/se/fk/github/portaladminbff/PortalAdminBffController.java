@@ -68,6 +68,22 @@ public class PortalAdminBffController
       return Response.ok(oulManagementClient.getSorteringsordningar()).build();
    }
 
+   @PATCH
+   @Path("/admin/tasks/{uppgiftId}")
+   public Response updateUppgift(@PathParam("uppgiftId") String uppgiftId, UpdateUppgiftRequest request)
+   {
+      LOGGER.debug("PATCH /admin/tasks/{}", uppgiftId);
+      try
+      {
+         RawOperativUppgift raw = oulManagementClient.patchUppgift(uppgiftId, UppgiftMapper.toOulRequest(request));
+         return Response.ok(UppgiftMapper.transform(raw)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @POST
    @Path("/admin/sorteringsordning")
    public Response createSorteringsordning(OulSorteringsordningSpec spec)

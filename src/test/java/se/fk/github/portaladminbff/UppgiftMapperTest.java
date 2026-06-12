@@ -3,7 +3,9 @@ package se.fk.github.portaladminbff;
 import org.junit.jupiter.api.Test;
 import se.fk.github.portaladminbff.model.HandlaggarId;
 import se.fk.github.portaladminbff.model.OperativUppgift;
+import se.fk.github.portaladminbff.model.OulUpdateUppgiftRequest;
 import se.fk.github.portaladminbff.model.RawOperativUppgift;
+import se.fk.github.portaladminbff.model.UpdateUppgiftRequest;
 
 import java.util.List;
 
@@ -88,6 +90,34 @@ class UppgiftMapperTest
       OperativUppgift result = UppgiftMapper.transform(raw);
 
       assertEquals("", result.utford);
+   }
+
+   @Test
+   void toOulRequest_mapsHandlaggarId()
+   {
+      HandlaggarId hid = new HandlaggarId();
+      hid.typId = "kortnummer";
+      hid.varde = "12345";
+
+      UpdateUppgiftRequest request = new UpdateUppgiftRequest();
+      request.handlaggarId = hid;
+
+      OulUpdateUppgiftRequest result = UppgiftMapper.toOulRequest(request);
+
+      assertNotNull(result.handlaggarId);
+      assertEquals("kortnummer", result.handlaggarId.typId);
+      assertEquals("12345", result.handlaggarId.varde);
+   }
+
+   @Test
+   void toOulRequest_handlesNullHandlaggarId()
+   {
+      UpdateUppgiftRequest request = new UpdateUppgiftRequest();
+      request.handlaggarId = null;
+
+      OulUpdateUppgiftRequest result = UppgiftMapper.toOulRequest(request);
+
+      assertNull(result.handlaggarId);
    }
 
    private RawOperativUppgift minimalRaw()

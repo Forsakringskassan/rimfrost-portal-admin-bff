@@ -1,7 +1,6 @@
 package se.fk.github.portaladminbff;
 
-import se.fk.github.portaladminbff.model.OperativUppgift;
-import se.fk.github.portaladminbff.model.RawOperativUppgift;
+import se.fk.github.portaladminbff.model.*;
 
 public class UppgiftMapper
 {
@@ -22,5 +21,18 @@ public class UppgiftMapper
       result.roll = raw.roll;
       result.url = raw.url;
       return result;
+   }
+
+   public static OulUpdateUppgiftRequest toOulRequest(UpdateUppgiftRequest request)
+   {
+      OulUpdateUppgiftRequest oul = new OulUpdateUppgiftRequest();
+      if (request.handlaggarId != null)
+      {
+         OulIdtyp id = new OulIdtyp();
+         id.typId = request.handlaggarId.typId;
+         id.varde = request.handlaggarId.varde;
+         oul.handlaggarId = id;
+      }
+      return oul;
    }
 }

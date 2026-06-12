@@ -5,7 +5,9 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import se.fk.github.portaladminbff.model.OulSorteringsordningResponse;
 import se.fk.github.portaladminbff.model.OulSorteringsordningSpec;
+import se.fk.github.portaladminbff.model.OulUpdateUppgiftRequest;
 import se.fk.github.portaladminbff.model.OulUppgiftPage;
+import se.fk.github.portaladminbff.model.RawOperativUppgift;
 
 import java.util.List;
 
@@ -35,4 +37,10 @@ public interface OulManagementClient
    @GET
    @Path("/sorteringsordning/{id}")
    OulSorteringsordningResponse getSorteringsordning(@PathParam("id") String id);
+
+   @PATCH
+   @Path("/uppgifter/{id}")
+   RawOperativUppgift patchUppgift(
+         @PathParam("id") String id,
+         OulUpdateUppgiftRequest request);
 }

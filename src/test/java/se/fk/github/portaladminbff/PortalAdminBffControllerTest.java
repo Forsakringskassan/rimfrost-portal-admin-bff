@@ -184,6 +184,94 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void updateUppgift_returnsMappedUppgiftOnSuccess()
+   {
+      OulManagementWireMock.server.stubFor(
+            patch(urlPathEqualTo("/uppgifter/test-001"))
+                  .willReturn(okJson("""
+                        {
+                          "uppgift_id": "test-001",
+                          "handlaggning_id": "h-001",
+                          "skapad": "2025-01-10",
+                          "status": "Tilldelad",
+                          "regel": "RTF_MANUELL",
+                          "roll": "Handläggning",
+                          "beskrivning": "Test",
+                          "verksamhetslogik": "VAB",
+                          "url": "",
+                          "individer": [],
+                          "handlaggar_id": {"typ_id": "kortnummer", "varde": "12345"},
+                          "planerad_till": null,
+                          "utford": null,
+                          "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
+                        }
+                        """))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"handlaggarId\": {\"typId\": \"kortnummer\", \"varde\": \"12345\"}}")
+            .when().patch("/admin/tasks/test-001")
+            .then()
+            .statusCode(200)
+            .body("uppgiftId", equalTo("test-001"))
+            .body("status", equalTo("Tilldelad"))
+            .body("handlaggarId.typId", equalTo("kortnummer"))
+            .body("handlaggarId.varde", equalTo("12345"));
+   }
+
+   @Test
+   void updateUppgift_forwardsHandlaggarIdAsSnakeCase()
+   {
+      OulManagementWireMock.server.stubFor(
+            patch(urlPathEqualTo("/uppgifter/test-002"))
+                  .withRequestBody(matchingJsonPath("$.handlaggar_id.typ_id", WireMock.equalTo("kortnummer")))
+                  .withRequestBody(matchingJsonPath("$.handlaggar_id.varde", WireMock.equalTo("99999")))
+                  .willReturn(okJson("""
+                        {
+                          "uppgift_id": "test-002",
+                          "handlaggning_id": "h-002",
+                          "skapad": "2025-01-11",
+                          "status": "Tilldelad",
+                          "regel": "RTF_MANUELL",
+                          "roll": "Handläggning",
+                          "beskrivning": "Test",
+                          "verksamhetslogik": "VAB",
+                          "url": "",
+                          "individer": [],
+                          "handlaggar_id": {"typ_id": "kortnummer", "varde": "99999"},
+                          "planerad_till": null,
+                          "utford": null,
+                          "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
+                        }
+                        """))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"handlaggarId\": {\"typId\": \"kortnummer\", \"varde\": \"99999\"}}")
+            .when().patch("/admin/tasks/test-002")
+            .then()
+            .statusCode(200);
+   }
+
+   @Test
+   void updateUppgift_returns404WhenNotFound()
+   {
+      OulManagementWireMock.server.stubFor(
+            patch(urlPathEqualTo("/uppgifter/does-not-exist"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"handlaggarId\": null}")
+            .when().patch("/admin/tasks/does-not-exist")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
    void createSorteringsordning_returnsCreatedWithBody()
    {
       OulManagementWireMock.server.stubFor(
