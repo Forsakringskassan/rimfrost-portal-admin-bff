@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import se.fk.github.portaladminbff.model.OulSorteringsordningResponse;
+import se.fk.github.portaladminbff.model.OulSorteringsordningSpec;
 import se.fk.github.portaladminbff.model.OulUppgiftPage;
 
 import java.util.List;
@@ -22,6 +23,10 @@ public interface OulManagementClient
    @GET
    @Path("/sorteringsordning")
    List<OulSorteringsordningResponse> getSorteringsordningar();
+
+   @POST
+   @Path("/sorteringsordning")
+   OulSorteringsordningResponse createSorteringsordning(OulSorteringsordningSpec spec);
 
    @GET
    @Path("/sorteringsordning/default")

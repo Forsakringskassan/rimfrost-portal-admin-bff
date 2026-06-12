@@ -184,6 +184,55 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void createSorteringsordning_returnsCreatedWithBody()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/sorteringsordning"))
+                  .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                              {
+                                "id": "f47ac10b-0001-0001-0001-000000000001",
+                                "skapad": "2026-06-11T09:00:00Z",
+                                "entries": [
+                                  {
+                                    "sort_by": {"field": "skapad", "direction": "asc"}
+                                  }
+                                ]
+                              }
+                              """))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("""
+                  {"entries": [{"sort_by": {"field": "skapad", "direction": "asc"}}]}
+                  """)
+            .when().post("/admin/sorteringsordning")
+            .then()
+            .statusCode(201)
+            .body("id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
+            .body("entries[0].sort_by.field", equalTo("skapad"));
+   }
+
+   @Test
+   void createSorteringsordning_propagates400FromOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/sorteringsordning"))
+                  .willReturn(aResponse().withStatus(400))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"entries\": []}")
+            .when().post("/admin/sorteringsordning")
+            .then()
+            .statusCode(400);
+   }
+
+   @Test
    void getSorteringsordning_returnsItemById()
    {
       OulManagementWireMock.server.stubFor(

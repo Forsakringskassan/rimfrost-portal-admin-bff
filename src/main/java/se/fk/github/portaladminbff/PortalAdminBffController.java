@@ -68,6 +68,23 @@ public class PortalAdminBffController
       return Response.ok(oulManagementClient.getSorteringsordningar()).build();
    }
 
+   @POST
+   @Path("/admin/sorteringsordning")
+   public Response createSorteringsordning(OulSorteringsordningSpec spec)
+   {
+      LOGGER.debug("POST /admin/sorteringsordning");
+      try
+      {
+         return Response.status(Response.Status.CREATED)
+               .entity(oulManagementClient.createSorteringsordning(spec))
+               .build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @GET
    @Path("/admin/sorteringsordning/{id}")
    public Response getSorteringsordning(@PathParam("id") String id)
