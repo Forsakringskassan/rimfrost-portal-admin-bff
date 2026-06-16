@@ -116,6 +116,22 @@ public class PortalAdminBffController
       }
    }
 
+   @PUT
+   @Path("/admin/sorteringsordning/{id}/default")
+   public Response setDefaultSorteringsordning(@PathParam("id") String id)
+   {
+      LOGGER.debug("PUT /admin/sorteringsordning/{}/default", id);
+      try
+      {
+         oulManagementClient.setDefaultSorteringsordning(id);
+         return Response.noContent().build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @GET
    @Path("/admin/sorteringsordning/default")
    public Response getDefaultSorteringsordning()

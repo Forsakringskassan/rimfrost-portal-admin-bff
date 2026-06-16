@@ -407,6 +407,34 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void setDefaultSorteringsordning_returns204OnSuccess()
+   {
+      OulManagementWireMock.server.stubFor(
+            put(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/default"))
+                  .willReturn(aResponse().withStatus(204))
+      );
+
+      given()
+            .when().put("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/default")
+            .then()
+            .statusCode(204);
+   }
+
+   @Test
+   void setDefaultSorteringsordning_returns404WhenNotFound()
+   {
+      OulManagementWireMock.server.stubFor(
+            put(urlPathEqualTo("/sorteringsordning/does-not-exist/default"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .when().put("/admin/sorteringsordning/does-not-exist/default")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
    void getAllTasks_callsOulWithLimitAndOffset()
    {
       OulManagementWireMock.server.stubFor(

@@ -43,4 +43,8 @@ public interface OulManagementClient
    RawOperativUppgift patchUppgift(
          @PathParam("id") String id,
          OulUpdateUppgiftRequest request);
+
+   @PUT
+   @Path("/sorteringsordning/{id}/default")
+   void setDefaultSorteringsordning(@PathParam("id") String id);
 }
