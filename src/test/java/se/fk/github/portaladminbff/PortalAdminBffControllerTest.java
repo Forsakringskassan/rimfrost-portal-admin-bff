@@ -407,6 +407,48 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void deleteSorteringsordning_returns204OnSuccess()
+   {
+      OulManagementWireMock.server.stubFor(
+            delete(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001"))
+                  .willReturn(aResponse().withStatus(204))
+      );
+
+      given()
+            .when().delete("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001")
+            .then()
+            .statusCode(204);
+   }
+
+   @Test
+   void deleteSorteringsordning_returns404WhenNotFound()
+   {
+      OulManagementWireMock.server.stubFor(
+            delete(urlPathEqualTo("/sorteringsordning/does-not-exist"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .when().delete("/admin/sorteringsordning/does-not-exist")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
+   void deleteSorteringsordning_returns409WhenDeletingDefault()
+   {
+      OulManagementWireMock.server.stubFor(
+            delete(urlPathEqualTo("/sorteringsordning/is-the-default"))
+                  .willReturn(aResponse().withStatus(409))
+      );
+
+      given()
+            .when().delete("/admin/sorteringsordning/is-the-default")
+            .then()
+            .statusCode(409);
+   }
+
+   @Test
    void setDefaultSorteringsordning_returns204OnSuccess()
    {
       OulManagementWireMock.server.stubFor(

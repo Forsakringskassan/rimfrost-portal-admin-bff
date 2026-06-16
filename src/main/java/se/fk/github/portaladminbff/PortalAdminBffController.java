@@ -116,6 +116,22 @@ public class PortalAdminBffController
       }
    }
 
+   @DELETE
+   @Path("/admin/sorteringsordning/{id}")
+   public Response deleteSorteringsordning(@PathParam("id") String id)
+   {
+      LOGGER.debug("DELETE /admin/sorteringsordning/{}", id);
+      try
+      {
+         oulManagementClient.deleteSorteringsordning(id);
+         return Response.noContent().build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @PUT
    @Path("/admin/sorteringsordning/{id}/default")
    public Response setDefaultSorteringsordning(@PathParam("id") String id)
