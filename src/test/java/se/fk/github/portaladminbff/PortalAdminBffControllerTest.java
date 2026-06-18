@@ -407,6 +407,90 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void previewSorteringsordning_returnsPreviewFromOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/sorteringsordning/preview"))
+                  .willReturn(okJson("""
+                        {
+                          "total": 1,
+                          "items": [
+                            {
+                              "uppgift_id": "aaa-001",
+                              "handlaggning_id": "h-001",
+                              "skapad": "2025-01-10",
+                              "status": "Ny",
+                              "regel": "RTF_MANUELL",
+                              "roll": "Handläggning",
+                              "beskrivning": "Test",
+                              "verksamhetslogik": "VAB",
+                              "url": "",
+                              "individer": [],
+                              "handlaggar_id": null,
+                              "planerad_till": null,
+                              "utford": null,
+                              "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
+                            }
+                          ]
+                        }
+                        """))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"entries\": []}")
+            .queryParam("limit", 10)
+            .when().post("/admin/sorteringsordning/preview")
+            .then()
+            .statusCode(200)
+            .body("total", equalTo(1))
+            .body("operativa_uppgifter", hasSize(1))
+            .body("operativa_uppgifter[0].uppgiftId", equalTo("aaa-001"))
+            .body("operativa_uppgifter[0].status", equalTo("Ny"));
+   }
+
+   @Test
+   void previewSorteringsordning_forwardsLimitAndOffsetToOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/sorteringsordning/preview"))
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"entries\": []}")
+            .queryParam("limit", 25)
+            .queryParam("offset", 50)
+            .when().post("/admin/sorteringsordning/preview")
+            .then()
+            .statusCode(200);
+
+      OulManagementWireMock.server.verify(
+            postRequestedFor(urlPathEqualTo("/sorteringsordning/preview"))
+                  .withQueryParam("limit", WireMock.equalTo("25"))
+                  .withQueryParam("offset", WireMock.equalTo("50"))
+      );
+   }
+
+   @Test
+   void previewSorteringsordning_propagates400FromOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/sorteringsordning/preview"))
+                  .willReturn(aResponse().withStatus(400))
+      );
+
+      given()
+            .contentType("application/json")
+            .body("{\"entries\": []}")
+            .queryParam("limit", 10)
+            .when().post("/admin/sorteringsordning/preview")
+            .then()
+            .statusCode(400);
+   }
+
+   @Test
    void deleteSorteringsordning_returns204OnSuccess()
    {
       OulManagementWireMock.server.stubFor(

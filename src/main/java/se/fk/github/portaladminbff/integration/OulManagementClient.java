@@ -51,4 +51,11 @@ public interface OulManagementClient
    @DELETE
    @Path("/sorteringsordning/{id}")
    void deleteSorteringsordning(@PathParam("id") String id);
+
+   @POST
+   @Path("/sorteringsordning/preview")
+   OulUppgiftPage previewSorteringsordning(
+         @QueryParam("limit") int limit,
+         @QueryParam("offset") int offset,
+         OulSorteringsordningSpec spec);
 }

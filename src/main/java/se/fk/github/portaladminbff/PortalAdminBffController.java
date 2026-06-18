@@ -116,6 +116,28 @@ public class PortalAdminBffController
       }
    }
 
+   @POST
+   @Path("/admin/sorteringsordning/preview")
+   public Response previewSorteringsordning(
+         @QueryParam("limit") int limit,
+         @QueryParam("offset") @DefaultValue("0") int offset,
+         OulSorteringsordningSpec spec)
+   {
+      LOGGER.debug("POST /admin/sorteringsordning/preview limit={} offset={}", limit, offset);
+      try
+      {
+         OulUppgiftPage page = oulManagementClient.previewSorteringsordning(limit, offset, spec);
+         List<OperativUppgift> uppgifter = page.items.stream()
+               .map(UppgiftMapper::transform)
+               .collect(Collectors.toList());
+         return Response.ok(Map.of("total", page.total, "operativa_uppgifter", uppgifter)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @DELETE
    @Path("/admin/sorteringsordning/{id}")
    public Response deleteSorteringsordning(@PathParam("id") String id)
