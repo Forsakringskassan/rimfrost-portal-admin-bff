@@ -134,25 +134,28 @@ class PortalAdminBffControllerTest
    }
 
    @Test
-   void getSorteringsordningar_returnsListFromOul()
+   void getSorteringsordningar_returnsPageFromOul()
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning"))
                   .willReturn(okJson("""
-                        [
-                          {
-                            "id": "f47ac10b-0001-0001-0001-000000000001",
-                            "skapad": "2026-06-01T10:00:00Z",
-                            "entries": [
-                              {
-                                "constraints": [
-                                  {"field": "status", "operator": "eq", "value": "Ny"}
-                                ],
-                                "sort_by": {"field": "skapad", "direction": "asc"}
-                              }
-                            ]
-                          }
-                        ]
+                        {
+                          "total": 1,
+                          "items": [
+                            {
+                              "id": "f47ac10b-0001-0001-0001-000000000001",
+                              "skapad": "2026-06-01T10:00:00Z",
+                              "entries": [
+                                {
+                                  "constraints": [
+                                    {"field": "status", "operator": "eq", "value": "Ny"}
+                                  ],
+                                  "sort_by": {"field": "skapad", "direction": "asc"}
+                                }
+                              ]
+                            }
+                          ]
+                        }
                         """))
       );
 
@@ -160,27 +163,50 @@ class PortalAdminBffControllerTest
             .when().get("/admin/sorteringsordning")
             .then()
             .statusCode(200)
-            .body("$", hasSize(1))
-            .body("[0].id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
-            .body("[0].entries", hasSize(1))
-            .body("[0].entries[0].sort_by.field", equalTo("skapad"))
-            .body("[0].entries[0].sort_by.direction", equalTo("asc"))
-            .body("[0].entries[0].constraints[0].field", equalTo("status"));
+            .body("total", equalTo(1))
+            .body("items", hasSize(1))
+            .body("items[0].id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
+            .body("items[0].entries[0].sort_by.field", equalTo("skapad"))
+            .body("items[0].entries[0].sort_by.direction", equalTo("asc"))
+            .body("items[0].entries[0].constraints[0].field", equalTo("status"));
    }
 
    @Test
-   void getSorteringsordningar_returnsEmptyListWhenOulReturnsNone()
+   void getSorteringsordningar_returnsEmptyPageWhenOulReturnsNone()
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning"))
-                  .willReturn(okJson("[]"))
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
       );
 
       given()
             .when().get("/admin/sorteringsordning")
             .then()
             .statusCode(200)
-            .body("$", empty());
+            .body("total", equalTo(0))
+            .body("items", empty());
+   }
+
+   @Test
+   void getSorteringsordningar_forwardsLimitAndOffsetToOul()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/sorteringsordning"))
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
+      );
+
+      given()
+            .queryParam("limit", 50)
+            .queryParam("offset", 10)
+            .when().get("/admin/sorteringsordning")
+            .then()
+            .statusCode(200);
+
+      OulManagementWireMock.server.verify(
+            getRequestedFor(urlPathEqualTo("/sorteringsordning"))
+                  .withQueryParam("limit", WireMock.equalTo("50"))
+                  .withQueryParam("offset", WireMock.equalTo("10"))
+      );
    }
 
    @Test

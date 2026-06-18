@@ -62,10 +62,12 @@ public class PortalAdminBffController
 
    @GET
    @Path("/admin/sorteringsordning")
-   public Response getSorteringsordningar()
+   public Response getSorteringsordningar(
+         @QueryParam("limit") @DefaultValue("100") int limit,
+         @QueryParam("offset") @DefaultValue("0") int offset)
    {
-      LOGGER.debug("GET /admin/sorteringsordning");
-      return Response.ok(oulManagementClient.getSorteringsordningar()).build();
+      LOGGER.debug("GET /admin/sorteringsordning limit={} offset={}", limit, offset);
+      return Response.ok(oulManagementClient.getSorteringsordningar(limit, offset)).build();
    }
 
    @POST

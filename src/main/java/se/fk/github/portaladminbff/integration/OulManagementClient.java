@@ -3,13 +3,12 @@ package se.fk.github.portaladminbff.integration;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import se.fk.github.portaladminbff.model.OulSorteringsordningPage;
 import se.fk.github.portaladminbff.model.OulSorteringsordningResponse;
 import se.fk.github.portaladminbff.model.OulSorteringsordningSpec;
 import se.fk.github.portaladminbff.model.OulUpdateUppgiftRequest;
 import se.fk.github.portaladminbff.model.OulUppgiftPage;
 import se.fk.github.portaladminbff.model.RawOperativUppgift;
-
-import java.util.List;
 
 @RegisterRestClient(configKey = "oul-management")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,7 +23,9 @@ public interface OulManagementClient
 
    @GET
    @Path("/sorteringsordning")
-   List<OulSorteringsordningResponse> getSorteringsordningar();
+   OulSorteringsordningPage getSorteringsordningar(
+         @QueryParam("limit") int limit,
+         @QueryParam("offset") int offset);
 
    @POST
    @Path("/sorteringsordning")
