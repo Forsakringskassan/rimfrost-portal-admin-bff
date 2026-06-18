@@ -68,6 +68,23 @@ public class PortalAdminBffController
       return Response.ok(oulManagementClient.getSorteringsordningar()).build();
    }
 
+   @POST
+   @Path("/admin/tasks/{uppgiftId}/unassign")
+   @Consumes(MediaType.WILDCARD)
+   public Response unassignUppgift(@PathParam("uppgiftId") String uppgiftId)
+   {
+      LOGGER.debug("POST /admin/tasks/{}/unassign", uppgiftId);
+      try
+      {
+         RawOperativUppgift raw = oulManagementClient.unassignUppgift(uppgiftId);
+         return Response.ok(UppgiftMapper.transform(raw)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
    @PATCH
    @Path("/admin/tasks/{uppgiftId}")
    public Response updateUppgift(@PathParam("uppgiftId") String uppgiftId, UpdateUppgiftRequest request)

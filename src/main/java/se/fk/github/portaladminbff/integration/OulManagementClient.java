@@ -53,6 +53,10 @@ public interface OulManagementClient
    void deleteSorteringsordning(@PathParam("id") String id);
 
    @POST
+   @Path("/uppgifter/{id}/unassign")
+   RawOperativUppgift unassignUppgift(@PathParam("id") String id);
+
+   @POST
    @Path("/sorteringsordning/preview")
    OulUppgiftPage previewSorteringsordning(
          @QueryParam("limit") int limit,

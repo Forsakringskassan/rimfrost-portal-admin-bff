@@ -407,6 +407,53 @@ class PortalAdminBffControllerTest
    }
 
    @Test
+   void unassignUppgift_returnsMappedUppgiftOnSuccess()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/uppgifter/test-001/unassign"))
+                  .willReturn(okJson("""
+                        {
+                          "uppgift_id": "test-001",
+                          "handlaggning_id": "h-001",
+                          "skapad": "2025-01-10",
+                          "status": "Ny",
+                          "regel": "RTF_MANUELL",
+                          "roll": "Handläggning",
+                          "beskrivning": "Test",
+                          "verksamhetslogik": "VAB",
+                          "url": "",
+                          "individer": [],
+                          "handlaggar_id": null,
+                          "planerad_till": null,
+                          "utford": null,
+                          "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
+                        }
+                        """))
+      );
+
+      given()
+            .when().post("/admin/tasks/test-001/unassign")
+            .then()
+            .statusCode(200)
+            .body("uppgiftId", equalTo("test-001"))
+            .body("status", equalTo("Ny"));
+   }
+
+   @Test
+   void unassignUppgift_returns404WhenNotFound()
+   {
+      OulManagementWireMock.server.stubFor(
+            post(urlPathEqualTo("/uppgifter/does-not-exist/unassign"))
+                  .willReturn(aResponse().withStatus(404))
+      );
+
+      given()
+            .when().post("/admin/tasks/does-not-exist/unassign")
+            .then()
+            .statusCode(404);
+   }
+
+   @Test
    void previewSorteringsordning_returnsPreviewFromOul()
    {
       OulManagementWireMock.server.stubFor(
