@@ -49,15 +49,36 @@ public class PortalAdminBffController
 
       if (mockUppgifter)
       {
-         return Response.ok(Map.of("operativa_uppgifter", buildMockUppgifter())).build();
+         List<OperativUppgift> mock = buildMockUppgifter();
+         return Response.ok(Map.of("total", mock.size(), "operativa_uppgifter", mock)).build();
       }
 
-      OulUppgiftPage page = oulManagementClient.getUppgifter(tasksLimit, 0);
-      List<OperativUppgift> uppgifter = page.items.stream()
-            .map(UppgiftMapper::transform)
-            .collect(Collectors.toList());
-
-      return Response.ok(Map.of("operativa_uppgifter", uppgifter)).build();
+      try
+      {
+         OulUppgiftPage page = oulManagementClient.getUppgifter(tasksLimit, 0);
+         List<OperativUppgift> uppgifter = page.items.stream()
+               .map(UppgiftMapper::transform)
+               .collect(Collectors.toList());
+         return Response.ok(Map.of("total", page.total, "operativa_uppgifter", uppgifter)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         LOGGER.error("OUL returned error status={} fetching tasks", e.getResponse().getStatus(), e);
+         return Response.status(e.getResponse().getStatus())
+               .entity(Map.of("error", "Upstream error fetching tasks")).build();
+      }
+      catch (ProcessingException e)
+      {
+         LOGGER.error("OUL unreachable when fetching tasks", e);
+         return Response.status(502)
+               .entity(Map.of("error", "OUL unavailable")).build();
+      }
+      catch (Exception e)
+      {
+         LOGGER.error("Unexpected error on GET /admin/tasks", e);
+         return Response.status(500)
+               .entity(Map.of("error", "Internal server error")).build();
+      }
    }
 
    @GET

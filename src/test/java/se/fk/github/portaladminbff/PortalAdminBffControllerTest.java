@@ -72,12 +72,28 @@ class PortalAdminBffControllerTest
             .when().get("/admin/tasks")
             .then()
             .statusCode(200)
+            .body("total", equalTo(2))
             .body("operativa_uppgifter", hasSize(2))
             .body("operativa_uppgifter[0].uppgiftId", equalTo("aaa-001"))
             .body("operativa_uppgifter[0].status", equalTo("Ny"))
             .body("operativa_uppgifter[1].uppgiftId", equalTo("bbb-002"))
             .body("operativa_uppgifter[1].handlaggarId.typId", equalTo("abc"))
             .body("operativa_uppgifter[1].handlaggarId.varde", equalTo("19901010-1234"));
+   }
+
+   @Test
+   void getAllTasks_returnsJsonErrorWhenOulReturns500()
+   {
+      OulManagementWireMock.server.stubFor(
+            get(urlPathEqualTo("/uppgifter"))
+                  .willReturn(aResponse().withStatus(500))
+      );
+
+      given()
+            .when().get("/admin/tasks")
+            .then()
+            .statusCode(500)
+            .body("error", equalTo("Upstream error fetching tasks"));
    }
 
    @Test
@@ -130,6 +146,7 @@ class PortalAdminBffControllerTest
             .when().get("/admin/tasks")
             .then()
             .statusCode(200)
+            .body("total", equalTo(0))
             .body("operativa_uppgifter", empty());
    }
 
