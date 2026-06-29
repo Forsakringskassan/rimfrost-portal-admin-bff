@@ -49,6 +49,12 @@ public interface OulManagementClient
    @Path("/sorteringsordning/{id}/default")
    void setDefaultSorteringsordning(@PathParam("id") String id);
 
+   @PUT
+   @Path("/sorteringsordning/{id}")
+   OulSorteringsordningResponse updateSorteringsordning(
+         @PathParam("id") String id,
+         OulSorteringsordningSpec spec);
+
    @DELETE
    @Path("/sorteringsordning/{id}")
    void deleteSorteringsordning(@PathParam("id") String id);
