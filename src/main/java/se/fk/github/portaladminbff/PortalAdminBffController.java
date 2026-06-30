@@ -177,6 +177,21 @@ public class PortalAdminBffController
    }
 
    @PUT
+   @Path("/admin/sorteringsordning/{id}")
+   public Response updateSorteringsordning(@PathParam("id") String id, OulSorteringsordningSpec spec)
+   {
+      LOGGER.debug("PUT /admin/sorteringsordning/{}", id);
+      try
+      {
+         return Response.ok(oulManagementClient.updateSorteringsordning(id, spec)).build();
+      }
+      catch (WebApplicationException e)
+      {
+         return Response.status(e.getResponse().getStatus()).build();
+      }
+   }
+
+   @PUT
    @Path("/admin/sorteringsordning/{id}/default")
    public Response setDefaultSorteringsordning(@PathParam("id") String id)
    {

@@ -4,5 +4,6 @@ import java.util.List;
 
 public class OulSorteringsordningSpec
 {
+   public String namn;
    public List<OulSorteringsordningEntry> entries;
 }
