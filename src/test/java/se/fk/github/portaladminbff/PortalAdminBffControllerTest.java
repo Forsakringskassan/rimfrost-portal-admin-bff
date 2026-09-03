@@ -404,10 +404,10 @@ class PortalAdminBffControllerTest
    }
 
    @Test
-   void getDefaultSorteringsordning_returnsDefaultFromOul()
+   void getAktivSorteringsordning_returnsAktivFromOul()
    {
       OulManagementWireMock.server.stubFor(
-            get(urlPathEqualTo("/sorteringsordning/default"))
+            get(urlPathEqualTo("/sorteringsordning/aktiv"))
                   .willReturn(okJson("""
                         {
                           "id": "f47ac10b-0001-0001-0001-000000000001",
@@ -425,7 +425,7 @@ class PortalAdminBffControllerTest
       );
 
       given()
-            .when().get("/admin/sorteringsordning/default")
+            .when().get("/admin/sorteringsordning/aktiv")
             .then()
             .statusCode(200)
             .body("id", equalTo("f47ac10b-0001-0001-0001-000000000001"))
@@ -436,15 +436,15 @@ class PortalAdminBffControllerTest
    }
 
    @Test
-   void getDefaultSorteringsordning_returns404WhenNotConfigured()
+   void getAktivSorteringsordning_returns404WhenNotConfigured()
    {
       OulManagementWireMock.server.stubFor(
-            get(urlPathEqualTo("/sorteringsordning/default"))
+            get(urlPathEqualTo("/sorteringsordning/aktiv"))
                   .willReturn(aResponse().withStatus(404))
       );
 
       given()
-            .when().get("/admin/sorteringsordning/default")
+            .when().get("/admin/sorteringsordning/aktiv")
             .then()
             .statusCode(404);
    }
@@ -609,43 +609,43 @@ class PortalAdminBffControllerTest
    }
 
    @Test
-   void deleteSorteringsordning_returns409WhenDeletingDefault()
+   void deleteSorteringsordning_returns409WhenDeletingAktiv()
    {
       OulManagementWireMock.server.stubFor(
-            delete(urlPathEqualTo("/sorteringsordning/is-the-default"))
+            delete(urlPathEqualTo("/sorteringsordning/is-the-aktiv"))
                   .willReturn(aResponse().withStatus(409))
       );
 
       given()
-            .when().delete("/admin/sorteringsordning/is-the-default")
+            .when().delete("/admin/sorteringsordning/is-the-aktiv")
             .then()
             .statusCode(409);
    }
 
    @Test
-   void setDefaultSorteringsordning_returns204OnSuccess()
+   void setAktivSorteringsordning_returns204OnSuccess()
    {
       OulManagementWireMock.server.stubFor(
-            put(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/default"))
+            put(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/aktiv"))
                   .willReturn(aResponse().withStatus(204))
       );
 
       given()
-            .when().put("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/default")
+            .when().put("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/aktiv")
             .then()
             .statusCode(204);
    }
 
    @Test
-   void setDefaultSorteringsordning_returns404WhenNotFound()
+   void setAktivSorteringsordning_returns404WhenNotFound()
    {
       OulManagementWireMock.server.stubFor(
-            put(urlPathEqualTo("/sorteringsordning/does-not-exist/default"))
+            put(urlPathEqualTo("/sorteringsordning/does-not-exist/aktiv"))
                   .willReturn(aResponse().withStatus(404))
       );
 
       given()
-            .when().put("/admin/sorteringsordning/does-not-exist/default")
+            .when().put("/admin/sorteringsordning/does-not-exist/aktiv")
             .then()
             .statusCode(404);
    }

@@ -192,13 +192,13 @@ public class PortalAdminBffController
    }
 
    @PUT
-   @Path("/admin/sorteringsordning/{id}/default")
-   public Response setDefaultSorteringsordning(@PathParam("id") String id)
+   @Path("/admin/sorteringsordning/{id}/aktiv")
+   public Response setAktivSorteringsordning(@PathParam("id") String id)
    {
-      LOGGER.debug("PUT /admin/sorteringsordning/{}/default", id);
+      LOGGER.debug("PUT /admin/sorteringsordning/{}/aktiv", id);
       try
       {
-         oulManagementClient.setDefaultSorteringsordning(id);
+         oulManagementClient.setAktivSorteringsordning(id);
          return Response.noContent().build();
       }
       catch (WebApplicationException e)
@@ -208,13 +208,13 @@ public class PortalAdminBffController
    }
 
    @GET
-   @Path("/admin/sorteringsordning/default")
-   public Response getDefaultSorteringsordning()
+   @Path("/admin/sorteringsordning/aktiv")
+   public Response getAktivSorteringsordning()
    {
-      LOGGER.debug("GET /admin/sorteringsordning/default");
+      LOGGER.debug("GET /admin/sorteringsordning/aktiv");
       try
       {
-         return Response.ok(oulManagementClient.getDefaultSorteringsordning()).build();
+         return Response.ok(oulManagementClient.getAktivSorteringsordning()).build();
       }
       catch (WebApplicationException e)
       {
