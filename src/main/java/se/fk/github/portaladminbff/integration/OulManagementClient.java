@@ -32,8 +32,8 @@ public interface OulManagementClient
    OulSorteringsordningResponse createSorteringsordning(OulSorteringsordningSpec spec);
 
    @GET
-   @Path("/sorteringsordning/default")
-   OulSorteringsordningResponse getDefaultSorteringsordning();
+   @Path("/sorteringsordning/aktiv")
+   OulSorteringsordningResponse getAktivSorteringsordning();
 
    @GET
    @Path("/sorteringsordning/{id}")
@@ -46,8 +46,8 @@ public interface OulManagementClient
          OulUpdateUppgiftRequest request);
 
    @PUT
-   @Path("/sorteringsordning/{id}/default")
-   void setDefaultSorteringsordning(@PathParam("id") String id);
+   @Path("/sorteringsordning/{id}/aktiv")
+   void setAktivSorteringsordning(@PathParam("id") String id);
 
    @PUT
    @Path("/sorteringsordning/{id}")
