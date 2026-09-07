@@ -669,4 +669,23 @@ class PortalAdminBffControllerTest
                   .withQueryParam("offset", WireMock.equalTo("0"))
       );
    }
+
+   @Test
+   void getHandlaggare_returnsMockHandlaggareWithKnownTeamServiceIdentities()
+   {
+      // typId matches HandlaggareIdentitet.TYP_ID in rimfrost-service-team, and rimfrost-portal-bff's
+      // equivalent mock list (PBFF-FR-02.3), so the two BFFs share one source of truth for names.
+      given()
+            .when()
+            .get("/admin/handlaggare")
+            .then()
+            .statusCode(200)
+            .body("handlaggare", hasSize(3))
+            .body("handlaggare[0].fornamn", equalTo("Lisa"))
+            .body("handlaggare[0].efternamn", equalTo("Tass"))
+            .body("handlaggare[0].handlaggarId.typId", equalTo("116759e4-18fd-4209-849c-90abbd257d22"))
+            .body("handlaggare[0].handlaggarId.varde", equalTo("111111111"))
+            .body("handlaggare[1].handlaggarId.varde", equalTo("222222222"))
+            .body("handlaggare[2].handlaggarId.varde", equalTo("333333333"));
+   }
 }

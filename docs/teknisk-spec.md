@@ -24,6 +24,7 @@ Ingen extern OpenAPI-specifikation — kontraktet definieras av kontrollerklasse
 
 | Metod | Sökväg | Beskrivning |
 |---|---|---|
+| GET | `/admin/handlaggare` | Mockad handläggarlista (samma testidentiteter som rimfrost-portal-bff) |
 | GET | `/admin/tasks` | Samtliga operativa uppgifter |
 | POST | `/admin/tasks/{uppgiftId}/unassign` | Ta bort tilldelning |
 | PATCH | `/admin/tasks/{uppgiftId}` | Uppdatera tilldelad handläggare |

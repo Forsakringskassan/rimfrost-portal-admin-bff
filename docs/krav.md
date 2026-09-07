@@ -48,6 +48,15 @@ OUL-administrationstjänstens interna datamodell och namngivningskonvention.
   otillgänglighet hos OUL, och oväntade interna fel, och returnera lämplig HTTP-statuskod för
   varje fall.
 
+### PABF-FR-04 — Handläggarinformation
+
+- **PABF-FR-04.1** BFF:n ska kunna tillhandahålla en lista över handläggare via en dedikerad
+  ändpunkt, i väntan på en riktig källa för handläggardata.
+- **PABF-FR-04.2** De tillhandahållna handläggarnas identiteter (`typId`/`varde`) ska matcha
+  samma fasta testidentiteter som `rimfrost-portal-bff`s motsvarande mock-lista (PBFF-FR-02.3)
+  — samma tre namn, samma identiteter, för att de två BFF:erna ska dela en gemensam källa till
+  sanning för handläggarnamn, oavsett vilken portal som visar dem.
+
 ---
 
 ## Icke-funktionella krav
