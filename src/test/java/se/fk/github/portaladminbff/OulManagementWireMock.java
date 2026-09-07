@@ -16,8 +16,7 @@ public class OulManagementWireMock implements QuarkusTestResourceLifecycleManage
       server = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
       server.start();
       return Map.of(
-            "quarkus.rest-client.oul-management.url", server.baseUrl()
-      );
+            "quarkus.rest-client.oul-management.url", server.baseUrl());
    }
 
    @Override

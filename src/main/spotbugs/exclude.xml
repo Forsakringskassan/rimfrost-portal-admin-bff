@@ -1,7 +1,16 @@
 <FindBugsFilter>
-  <!-- Public fields in model/DTO classes are read by Jackson via reflection, not visible to SpotBugs -->
+  <!-- Public fields in model/DTO classes are read/written by Jackson via reflection, not visible to SpotBugs -->
   <Match>
     <Class name="~se\.fk\.github\.portaladminbff\.model\..*"/>
-    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+    <Or>
+      <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+      <Bug pattern="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
+      <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"/>
+    </Or>
+  </Match>
+  <!-- Same reason: SpotBugs reports the read site (not the model class) for this pattern -->
+  <Match>
+    <Bug pattern="NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"/>
+    <Field name="items"/>
   </Match>
 </FindBugsFilter>
