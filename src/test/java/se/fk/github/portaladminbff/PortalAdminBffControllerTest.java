@@ -65,8 +65,7 @@ class PortalAdminBffControllerTest
                             }
                           ]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/tasks")
@@ -86,8 +85,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/uppgifter"))
-                  .willReturn(aResponse().withStatus(500))
-      );
+                  .willReturn(aResponse().withStatus(500)));
 
       given()
             .when().get("/admin/tasks")
@@ -121,8 +119,7 @@ class PortalAdminBffControllerTest
                             "erbjudande": {"id": "e3", "namn": "Erbjudande 3"}
                           }]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/tasks")
@@ -139,8 +136,7 @@ class PortalAdminBffControllerTest
             get(urlPathEqualTo("/uppgifter"))
                   .willReturn(okJson("""
                         {"total": 0, "items": []}
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/tasks")
@@ -173,8 +169,7 @@ class PortalAdminBffControllerTest
                             }
                           ]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/sorteringsordning")
@@ -193,8 +188,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning"))
-                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
-      );
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}")));
 
       given()
             .when().get("/admin/sorteringsordning")
@@ -209,8 +203,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning"))
-                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
-      );
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}")));
 
       given()
             .queryParam("limit", 50)
@@ -222,8 +215,7 @@ class PortalAdminBffControllerTest
       OulManagementWireMock.server.verify(
             getRequestedFor(urlPathEqualTo("/sorteringsordning"))
                   .withQueryParam("limit", WireMock.equalTo("50"))
-                  .withQueryParam("offset", WireMock.equalTo("10"))
-      );
+                  .withQueryParam("offset", WireMock.equalTo("10")));
    }
 
    @Test
@@ -248,8 +240,7 @@ class PortalAdminBffControllerTest
                           "utford": null,
                           "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .contentType("application/json")
@@ -287,8 +278,7 @@ class PortalAdminBffControllerTest
                           "utford": null,
                           "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .contentType("application/json")
@@ -303,8 +293,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             patch(urlPathEqualTo("/uppgifter/does-not-exist"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .contentType("application/json")
@@ -332,8 +321,7 @@ class PortalAdminBffControllerTest
                                   }
                                 ]
                               }
-                              """))
-      );
+                              """)));
 
       given()
             .contentType("application/json")
@@ -352,8 +340,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             post(urlPathEqualTo("/sorteringsordning"))
-                  .willReturn(aResponse().withStatus(400))
-      );
+                  .willReturn(aResponse().withStatus(400)));
 
       given()
             .contentType("application/json")
@@ -378,8 +365,7 @@ class PortalAdminBffControllerTest
                             }
                           ]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001")
@@ -394,8 +380,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning/does-not-exist"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .when().get("/admin/sorteringsordning/does-not-exist")
@@ -421,8 +406,7 @@ class PortalAdminBffControllerTest
                             }
                           ]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().get("/admin/sorteringsordning/aktiv")
@@ -440,8 +424,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/sorteringsordning/aktiv"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .when().get("/admin/sorteringsordning/aktiv")
@@ -471,8 +454,7 @@ class PortalAdminBffControllerTest
                           "utford": null,
                           "erbjudande": {"id": "e1", "namn": "Erbjudande 1"}
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .when().post("/admin/tasks/test-001/unassign")
@@ -487,8 +469,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             post(urlPathEqualTo("/uppgifter/does-not-exist/unassign"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .when().post("/admin/tasks/does-not-exist/unassign")
@@ -523,8 +504,7 @@ class PortalAdminBffControllerTest
                             }
                           ]
                         }
-                        """))
-      );
+                        """)));
 
       given()
             .contentType("application/json")
@@ -544,8 +524,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             post(urlPathEqualTo("/sorteringsordning/preview"))
-                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
-      );
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}")));
 
       given()
             .contentType("application/json")
@@ -559,8 +538,7 @@ class PortalAdminBffControllerTest
       OulManagementWireMock.server.verify(
             postRequestedFor(urlPathEqualTo("/sorteringsordning/preview"))
                   .withQueryParam("limit", WireMock.equalTo("25"))
-                  .withQueryParam("offset", WireMock.equalTo("50"))
-      );
+                  .withQueryParam("offset", WireMock.equalTo("50")));
    }
 
    @Test
@@ -568,8 +546,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             post(urlPathEqualTo("/sorteringsordning/preview"))
-                  .willReturn(aResponse().withStatus(400))
-      );
+                  .willReturn(aResponse().withStatus(400)));
 
       given()
             .contentType("application/json")
@@ -585,8 +562,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             delete(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001"))
-                  .willReturn(aResponse().withStatus(204))
-      );
+                  .willReturn(aResponse().withStatus(204)));
 
       given()
             .when().delete("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001")
@@ -599,8 +575,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             delete(urlPathEqualTo("/sorteringsordning/does-not-exist"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .when().delete("/admin/sorteringsordning/does-not-exist")
@@ -613,8 +588,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             delete(urlPathEqualTo("/sorteringsordning/is-the-aktiv"))
-                  .willReturn(aResponse().withStatus(409))
-      );
+                  .willReturn(aResponse().withStatus(409)));
 
       given()
             .when().delete("/admin/sorteringsordning/is-the-aktiv")
@@ -627,8 +601,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             put(urlPathEqualTo("/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/aktiv"))
-                  .willReturn(aResponse().withStatus(204))
-      );
+                  .willReturn(aResponse().withStatus(204)));
 
       given()
             .when().put("/admin/sorteringsordning/f47ac10b-0001-0001-0001-000000000001/aktiv")
@@ -641,8 +614,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             put(urlPathEqualTo("/sorteringsordning/does-not-exist/aktiv"))
-                  .willReturn(aResponse().withStatus(404))
-      );
+                  .willReturn(aResponse().withStatus(404)));
 
       given()
             .when().put("/admin/sorteringsordning/does-not-exist/aktiv")
@@ -655,8 +627,7 @@ class PortalAdminBffControllerTest
    {
       OulManagementWireMock.server.stubFor(
             get(urlPathEqualTo("/uppgifter"))
-                  .willReturn(okJson("{\"total\": 0, \"items\": []}"))
-      );
+                  .willReturn(okJson("{\"total\": 0, \"items\": []}")));
 
       given()
             .when().get("/admin/tasks")
@@ -666,7 +637,6 @@ class PortalAdminBffControllerTest
       OulManagementWireMock.server.verify(
             getRequestedFor(urlPathEqualTo("/uppgifter"))
                   .withQueryParam("limit", WireMock.equalTo("500"))
-                  .withQueryParam("offset", WireMock.equalTo("0"))
-      );
+                  .withQueryParam("offset", WireMock.equalTo("0")));
    }
 }
