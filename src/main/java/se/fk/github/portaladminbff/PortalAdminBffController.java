@@ -31,6 +31,47 @@ public class PortalAdminBffController
    int tasksLimit;
 
    @GET
+   @Path("/admin/handlaggare")
+   public Response getHandlaggare()
+   {
+      LOGGER.debug("GET /admin/handlaggare");
+
+      // Hårdkodad testdata, samma identiteter som rimfrost-portal-bff:s motsvarande mock-lista
+      // (PBFF-FR-02.3) -- typId matchar rimfrost-service-team/rimfrost-service-sid:s kända
+      // testidentitet, så SID-behörighetskontroller ger meningsfulla utfall för dessa tre.
+      String kandTypId = "116759e4-18fd-4209-849c-90abbd257d22";
+
+      HandlaggarId id1 = new HandlaggarId();
+      id1.typId = kandTypId;
+      id1.varde = "111111111";
+
+      HandlaggarId id2 = new HandlaggarId();
+      id2.typId = kandTypId;
+      id2.varde = "222222222";
+
+      HandlaggarId id3 = new HandlaggarId();
+      id3.typId = kandTypId;
+      id3.varde = "333333333";
+
+      Handlaggare h1 = new Handlaggare();
+      h1.handlaggarId = id1;
+      h1.fornamn = "Lisa";
+      h1.efternamn = "Tass";
+
+      Handlaggare h2 = new Handlaggare();
+      h2.handlaggarId = id2;
+      h2.fornamn = "Karl";
+      h2.efternamn = "von Dobermann";
+
+      Handlaggare h3 = new Handlaggare();
+      h3.handlaggarId = id3;
+      h3.fornamn = "Åsa";
+      h3.efternamn = "Ormsäter";
+
+      return Response.ok(Map.of("handlaggare", List.of(h1, h2, h3))).build();
+   }
+
+   @GET
    @Path("/admin/tasks")
    public Response getAllTasks()
    {
