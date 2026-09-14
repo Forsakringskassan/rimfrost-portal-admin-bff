@@ -2,6 +2,12 @@
 
 Changelog of rimfrost-portal-admin-bff.
 
+## 0.0.2 (2026-09-14)
+
+### Bug Fixes
+
+-  add missing Maven wrapper ([343df](https://github.com/Forsakringskassan/rimfrost-portal-admin-bff/commit/343df5ff7e9dfb3) LisaWedin_Ductus)  
+
 ## 0.0.1 (2026-09-08)
 
 ### Features
