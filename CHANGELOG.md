@@ -2,6 +2,14 @@
 
 Changelog of rimfrost-portal-admin-bff.
 
+## 0.0.5 (2026-11-04)
+
+### Bug Fixes
+
+-  replace secrets with permissions in release workflow ([677b1](https://github.com/Forsakringskassan/rimfrost-portal-admin-bff/commit/677b1121909d9e5) Ulf Slunga)  
+
+## rimfrost-1_2 (2026-09-16)
+
 ## 0.0.4 (2026-09-16)
 
 ### Bug Fixes
